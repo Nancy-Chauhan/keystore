@@ -22,10 +22,14 @@ repositories {
 
 dependencies {
     // This dependency is found on compile classpath of this component and consumers.
-    implementation 'com.google.guava:guava:27.0.1-jre'
-
+    //implementation 'com.google.guava:guava:27.0.1-jre'
+    implementation 'com.sparkjava:spark-core:2.8.0'
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
+
+    compile group: 'org.slf4j', name:'slf4j-api', version: '1.7.2'
+    compile group: 'ch.qos.logback', name:'logback-classic', version: '1.0.9'
+    compile group: 'ch.qos.logback', name:'logback-core', version: '1.0.9'
 }
 
 // Define the main class for the application
