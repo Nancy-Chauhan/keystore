@@ -33,3 +33,5 @@ To deploy Keystore code BUILD and RUN docker, to enable the API at the port 4567
 docker build -t keystore .
 docker run -p 4567:4567 keystore 
 ```
+After setting up the environment of server side , move to https://github.com/Nancy-Chauhan/keystore-client repository for
+the usage of CLI 
