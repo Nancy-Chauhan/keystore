@@ -9,9 +9,9 @@
 plugins {
     // Apply the java plugin to add support for Java
     id 'java'
-
-    // Apply the application plugin to add support for building an application
     id 'application'
+    id 'com.github.johnrengelman.shadow' version '5.0.0'
+
 }
 
 repositories {
@@ -26,11 +26,14 @@ dependencies {
     implementation 'com.sparkjava:spark-core:2.8.0'
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
+    compile 'com.google.code.gson:gson:2.2.+'
 
-    compile group: 'org.slf4j', name:'slf4j-api', version: '1.7.2'
-    compile group: 'ch.qos.logback', name:'logback-classic', version: '1.0.9'
-    compile group: 'ch.qos.logback', name:'logback-core', version: '1.0.9'
+    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.2'
+    compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.0.9'
+    compile group: 'ch.qos.logback', name: 'logback-core', version: '1.0.9'
 }
 
 // Define the main class for the application
 mainClassName = 'keystore.App'
+
+
