@@ -28,7 +28,7 @@ Watch : It send a change notification to every socket client which is connected.
 
 ## Usage
 
-To deploy Keystore code BUILD and RUN docker, to enable the API at the port 4567 of the host
+To deploy Keystore code clone the repository and BUILD and RUN docker, to enable the API at the port 4567 of the host by following commands:
 ```
 docker build -t keystore .
 docker run -p 4567:4567 keystore 
