@@ -6,11 +6,15 @@ import java.util.Collection;
 import java.util.Optional;
 
 public interface KeyValueStoreService {
-    public void add(KeyValue Value);
+    void add(KeyValue Value);
 
-    public Collection<KeyValue> getAll();
+    Collection<KeyValue> getAll();
 
-    public Optional<KeyValue> get(String Key);
+    Optional<KeyValue> get(String Key);
 
-    public boolean delete(String Key);
+    boolean delete(String Key);
+
+    void addChangeListener(ChangeListener listener);
+
+    void removeChangeListener(ChangeListener listener);
 }

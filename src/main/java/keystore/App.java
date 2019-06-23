@@ -6,6 +6,7 @@ package keystore;
 import com.google.gson.Gson;
 import keystore.exceptions.HttpException;
 import keystore.exceptions.ResourceNotFoundException;
+import keystore.handler.WatchHandler;
 import keystore.models.ErrorResponse;
 import keystore.models.KeyValue;
 import keystore.models.StatusResponse;
@@ -22,6 +23,9 @@ import static spark.Spark.*;
 public class App {
     public static void main(String[] args) {
         final KeyValueStoreService keyValueStoreService = new KeyValueStoreServiceImpl();
+        final WatchHandler watchHandler = new WatchHandler(keyValueStoreService);
+
+        webSocket("/watch", watchHandler);
 
         post("/keyvalue", (request, response) -> {
             response.type("application/json");
