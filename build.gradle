@@ -35,5 +35,8 @@ dependencies {
 
 // Define the main class for the application
 mainClassName = 'keystore.App'
+jar.enabled = false
+distZip.enabled = false
+distTar.enabled = false
 
 
