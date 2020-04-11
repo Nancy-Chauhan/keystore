@@ -4,6 +4,10 @@
 package keystore;
 
 import com.google.gson.Gson;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.prometheus.PrometheusConfig;
+import io.micrometer.prometheus.PrometheusMeterRegistry;
+import io.micrometer.prometheus.PrometheusRenameFilter;
 import keystore.exceptions.HttpException;
 import keystore.exceptions.ResourceNotFoundException;
 import keystore.handler.WatchHandler;
@@ -24,10 +28,37 @@ public class App {
     public static void main(String[] args) {
         final KeyValueStoreService keyValueStoreService = new KeyValueStoreServiceImpl();
         final WatchHandler watchHandler = new WatchHandler(keyValueStoreService);
-
+        final PrometheusMeterRegistry prometheusRegistry = new PrometheusMeterRegistry(PrometheusConfig.DEFAULT);
+        prometheusRegistry.config().meterFilter(new PrometheusRenameFilter());
+        prometheusRegistry.config().commonTags("application", "KeyValue");
+        Counter addRequestCounter = prometheusRegistry.counter("http.request",
+                "uri", "/keyvalue",
+                "operation", "add");
+        Counter getAllRequestCounter = prometheusRegistry.counter("http.request",
+                "uri", "/keyvalue",
+                "operation", "getAll");
+        Counter getRequestCounter = prometheusRegistry.counter("http.request",
+                "uri", "/keyvalue/:key",
+                "operation", "get");
+        Counter getSuccessCounter = prometheusRegistry.counter("http.request.success",
+                "uri", "/keyvalue/:key",
+                "operation", "get");
+        Counter getFailureCounter = prometheusRegistry.counter("http.request.failure",
+                "uri", "/keyvalue/:key",
+                "operation", "get");
+        Counter deleteRequestCounter = prometheusRegistry.counter("http.request",
+                "uri", "/keyvalue/:key",
+                "operation", "delete");
+        Counter deleteSuccessCounter = prometheusRegistry.counter("http.request.success",
+                "uri", "/keyvalue/:key",
+                "operation", "delete");
+        Counter deleteFailureCounter = prometheusRegistry.counter("http.request.failure",
+                "uri", "/keyvalue/:key",
+                "operation", "delete");
         webSocket("/watch", watchHandler);
 
         post("/keyvalue", (request, response) -> {
+            addRequestCounter.increment();
             response.type("application/json");
 
             KeyValue Values = new Gson().fromJson(request.body(), KeyValue.class);
@@ -37,27 +68,38 @@ public class App {
         });
 
         get("/keyvalue", (request, response) -> {
+            getAllRequestCounter.increment();
             response.type("application/json");
 
             return new Gson().toJson(keyValueStoreService.getAll());
         });
 
         get("/keyvalue/:key", (request, response) -> {
+            getRequestCounter.increment();
             response.type("application/json");
             Optional<KeyValue> maybeKeyValue = keyValueStoreService.get(request.params("key"));
 
+            if (maybeKeyValue.isPresent()) {
+                getSuccessCounter.increment();
+            } else {
+                getFailureCounter.increment();
+            }
             return new Gson().toJson(maybeKeyValue.orElseThrow(ResourceNotFoundException::new));
         });
 
         delete("/keyvalue/:key", (request, response) -> {
+            deleteRequestCounter.increment();
             response.type("application/json");
 
-            if(keyValueStoreService.delete(request.params(":key"))) {
+            if (keyValueStoreService.delete(request.params(":key"))) {
+                deleteSuccessCounter.increment();
                 return new Gson().toJson(StatusResponse.SUCCESS);
             }
-
+            deleteFailureCounter.increment();
             throw new ResourceNotFoundException();
         });
+
+        get("/metrics", (request, response) -> prometheusRegistry.scrape());
 
         notFound(App::notFoundHandler);
         //exception(HttpException.class, App::exceptionHandler);
@@ -73,7 +115,7 @@ public class App {
         int status = 500;
         String message = "Internal server error";
 
-        if(t instanceof HttpException) {
+        if (t instanceof HttpException) {
             HttpException exception = (HttpException) t;
             status = exception.getStatusCode();
             message = exception.getMessage();
