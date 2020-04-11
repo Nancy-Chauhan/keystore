@@ -6,7 +6,7 @@ public class KeyValue {
 
     public KeyValue(String Key, String Value) {
         this.key = Key;
-        this.value = Value ;
+        this.value = Value;
     }
 
     public String getKey() {

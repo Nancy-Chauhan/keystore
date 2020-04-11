@@ -4,6 +4,8 @@
 package keystore;
 
 import com.google.gson.Gson;
+import io.github.mweirauch.micrometer.jvm.extras.ProcessMemoryMetrics;
+import io.github.mweirauch.micrometer.jvm.extras.ProcessThreadMetrics;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.prometheus.PrometheusConfig;
 import io.micrometer.prometheus.PrometheusMeterRegistry;
@@ -31,6 +33,8 @@ public class App {
         final PrometheusMeterRegistry prometheusRegistry = new PrometheusMeterRegistry(PrometheusConfig.DEFAULT);
         prometheusRegistry.config().meterFilter(new PrometheusRenameFilter());
         prometheusRegistry.config().commonTags("application", "KeyValue");
+        new ProcessMemoryMetrics().bindTo(prometheusRegistry);
+        new ProcessThreadMetrics().bindTo(prometheusRegistry);
         Counter addRequestCounter = prometheusRegistry.counter("http.request",
                 "uri", "/keyvalue",
                 "operation", "add");

@@ -1,0 +1,9 @@
+apiVersion: 1
+
+datasources:
+  - version: 1
+    name: prometheus
+    type: prometheus
+    access: proxy
+    isDefault: true
+    url: http://prometheus:9090

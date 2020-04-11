@@ -29,6 +29,7 @@ dependencies {
     implementation 'com.sparkjava:spark-core:2.8.0'
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
+    compile group: 'io.github.mweirauch', name: 'micrometer-jvm-extras', version: '0.2.0'
     compile 'com.google.code.gson:gson:2.2.+'
     compile 'io.micrometer:micrometer-registry-prometheus:latest.release'
     compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.2'
