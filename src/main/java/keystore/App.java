@@ -22,6 +22,7 @@ import spark.Request;
 import spark.Response;
 
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static spark.Spark.*;
 
@@ -29,12 +30,12 @@ import static spark.Spark.*;
 public class App {
     public static void main(String[] args) {
         final KeyValueStoreService keyValueStoreService = new KeyValueStoreServiceImpl();
-        final WatchHandler watchHandler = new WatchHandler(keyValueStoreService);
         final PrometheusMeterRegistry prometheusRegistry = new PrometheusMeterRegistry(PrometheusConfig.DEFAULT);
         prometheusRegistry.config().meterFilter(new PrometheusRenameFilter());
         prometheusRegistry.config().commonTags("application", "KeyValue");
         new ProcessMemoryMetrics().bindTo(prometheusRegistry);
         new ProcessThreadMetrics().bindTo(prometheusRegistry);
+        AtomicInteger watchGauge = prometheusRegistry.gauge("KeyValueStore.watches", new AtomicInteger(0));
         Counter addRequestCounter = prometheusRegistry.counter("http.request",
                 "uri", "/keyvalue",
                 "operation", "add");
@@ -59,9 +60,11 @@ public class App {
         Counter deleteFailureCounter = prometheusRegistry.counter("http.request.failure",
                 "uri", "/keyvalue/:key",
                 "operation", "delete");
+
+        final WatchHandler watchHandler = new WatchHandler(keyValueStoreService, watchGauge);
         webSocket("/watch", watchHandler);
 
-        post("/keyvalue", (request, response) -> {
+        post("/keyvalue", (regquest, response) -> {
             addRequestCounter.increment();
             response.type("application/json");
 
