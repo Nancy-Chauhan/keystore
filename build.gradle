@@ -18,16 +18,11 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 repositories {
-    // Use jcenter for resolving your dependencies.
-    // You can declare any Maven/Ivy/file repository here.
     jcenter()
 }
 
 dependencies {
-    // This dependency is found on compile classpath of this component and consumers.
-    //implementation 'com.google.guava:guava:27.0.1-jre'
     implementation 'com.sparkjava:spark-core:2.8.0'
-    // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
     compile group: 'io.github.mweirauch', name: 'micrometer-jvm-extras', version: '0.2.0'
     compile 'com.google.code.gson:gson:2.2.+'

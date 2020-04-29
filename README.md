@@ -2,7 +2,8 @@ This project provides simple KV (key-value) store web service with a subscriptio
 As a user, one can perform set(key, val) and get(key) operations over HTTP and also subscribe to
 changes happening to any of the keys. This repository provides Server-side implementation of the web 
 service and https://github.com/Nancy-Chauhan/keystore-client repository provides a CLI client which consumes the web service
-supporting following commands : 
+supporting following commands :
+ 
 1) get <key>: displays the value of an existing key
 2) put <key> <value>: sets the value of the given key
 3) watch: when executed this displays any new changes happening on the KV store in realtime

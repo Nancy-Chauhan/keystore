@@ -69,7 +69,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Panel Title",
+      "title": "Total Requests",
       "tooltip": {
         "shared": true,
         "sort": 0,
