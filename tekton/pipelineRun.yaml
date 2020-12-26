@@ -11,6 +11,8 @@ spec:
       value: master
     - name: git-url
       value: https://github.com/Nancy-Chauhan/keystore.git
+    - name: image
+      value: ghcr.io/nancy-chauhan/keystore:latest
   workspaces:
     - name: source
       volumeClaimTemplate:

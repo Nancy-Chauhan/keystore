@@ -8,6 +8,8 @@ spec:
       type: string
     - name: git-url
       type: string
+    - name: image
+      type: string
   workspaces:
     - name: source
   tasks:
@@ -31,4 +33,4 @@ spec:
           workspace: source
       params:
         - name: IMAGE
-          value: ghcr.io/nancy-chauhan/keystore:latest
+          value: $(params.image)
