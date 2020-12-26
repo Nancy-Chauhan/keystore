@@ -1,0 +1,34 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: ci
+spec:
+  params:
+    - name: git-revision
+      type: string
+    - name: git-url
+      type: string
+  workspaces:
+    - name: source
+  tasks:
+    - name: git-clone
+      taskRef:
+        name: git-clone
+      workspaces:
+        - name: output
+          workspace: source
+      params:
+        - name: revision
+          value: $(params.git-revision)
+        - name: url
+          value: $(params.git-url)
+    - name: build-and-push
+      runAfter: ["git-clone"]
+      taskRef:
+        name: kaniko
+      workspaces:
+        - name: source
+          workspace: source
+      params:
+        - name: IMAGE
+          value: ghcr.io/nancy-chauhan/keystore:latest

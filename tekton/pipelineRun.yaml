@@ -1,0 +1,22 @@
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  generateName: keystore-ci-
+spec:
+  pipelineRef:
+    name: ci
+  serviceAccountName: tekton-ci
+  params:
+    - name: git-revision
+      value: master
+    - name: git-url
+      value: https://github.com/Nancy-Chauhan/keystore.git
+  workspaces:
+    - name: source
+      volumeClaimTemplate:
+        spec:
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 5Gi
