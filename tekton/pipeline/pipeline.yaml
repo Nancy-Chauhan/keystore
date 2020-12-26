@@ -10,6 +10,10 @@ spec:
       type: string
     - name: image
       type: string
+    - name: repo-name
+      type: string
+    - name: git-commit-sha
+      type: string
   workspaces:
     - name: source
   tasks:
@@ -34,3 +38,20 @@ spec:
       params:
         - name: IMAGE
           value: $(params.image)
+    - name: set-final-status
+      runAfter: ["build-and-push"]
+      taskRef:
+        name: github-set-status
+      params:
+        - name: REPO_FULL_NAME
+          value: $(params.repo-name)
+        - name: SHA
+          value: $(params.git-commit-sha)
+        - name: DESCRIPTION
+          value: "Build has started"
+        - name: STATE
+          value: success
+        - name: TARGET_URL
+          value: "http://localhost:9097/#/namespaces/tekton-pipelines/pipelineruns/$(context.pipelineRun.name)"
+        - name: CONTEXT
+          value: "continuous-integration/tekton"

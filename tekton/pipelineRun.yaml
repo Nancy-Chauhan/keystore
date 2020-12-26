@@ -13,6 +13,10 @@ spec:
       value: https://github.com/Nancy-Chauhan/keystore.git
     - name: image
       value: ghcr.io/nancy-chauhan/keystore:latest
+    - name: repo-name
+      value: Nancy-Chauhan/keystore
+    - name: git-commit-sha
+      value: 0d4b1935a9eddd1b3ecc8e921901aa34dfa703e6
   workspaces:
     - name: source
       volumeClaimTemplate:
