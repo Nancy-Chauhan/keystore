@@ -64,7 +64,7 @@ public class App {
         final WatchHandler watchHandler = new WatchHandler(keyValueStoreService, watchGauge);
         webSocket("/watch", watchHandler);
 
-        post("/keyvalue", (regquest, response) -> {
+        post("/keyvalue", (request, response) -> {
             addRequestCounter.increment();
             response.type("application/json");
 
