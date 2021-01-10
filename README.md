@@ -26,7 +26,6 @@ This deletes the key.
 ##### WebSocket /watch
 Watch : It send a change notification to every socket client which is connected. 
 
-
 ## Usage
 
 To deploy Keystore code clone the repository and BUILD and RUN docker, to enable the API at the port 4567 of the host by following commands:
