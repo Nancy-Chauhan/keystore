@@ -35,4 +35,4 @@ docker build -t keystore .
 docker run -p 4567:4567 keystore 
 ```
 After setting up the environment of server side , move to https://github.com/Nancy-Chauhan/keystore-client repository for
-the usage of CLI 
+the usage of CLI.
